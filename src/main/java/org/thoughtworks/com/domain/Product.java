@@ -3,6 +3,10 @@ package org.thoughtworks.com.domain;
 public class Product {
     private int id;
     private String name;
+    private Price currentPrice;
+
+    public Product() {
+    }
 
     public Product(int id, String productName) {
 
