@@ -30,4 +30,10 @@ public class ProductResource {
         int productId = productRepository.createProduct(product);
         return Response.status(201).location(uriInfo.getAbsolutePathBuilder().path(String.valueOf(productId)).build()).build();
     }
+
+
+    @Path("{id}/prices")
+    public PriceResource getPrice() {
+        return new PriceResource();
+    }
 }
