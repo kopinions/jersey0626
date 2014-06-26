@@ -4,8 +4,8 @@ public class Price {
     private final double price;
     private int id;
 
-    public Price(double price) {
-
+    public Price(int id, double price) {
+        this.id = id;
         this.price = price;
     }
 

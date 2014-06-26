@@ -17,7 +17,9 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
@@ -73,9 +75,13 @@ public class PriceResourceTest extends JerseyTest {
 
     @Test
     public void should_get_all_prices() {
+        when(productRepository.getProductById(2)).thenReturn(new Product(2));
+        when(productRepository.getProductPrices(any(Product.class))).thenReturn(asList(new Price(1, 1.1), new Price(2, 2.2)));
         Response response = target("/products/2/prices").request().get();
         assertEquals(response.getStatus(), 200);
 
+        List prices = response.readEntity(List.class);
+        assertEquals(prices.size(), 2);
     }
 
     @Override
