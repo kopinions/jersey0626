@@ -1,11 +1,11 @@
 package org.thoughtworks.com;
 
+import org.thoughtworks.com.domain.Product;
 import org.thoughtworks.com.provider.ProductRepository;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
 
 @Path("/products")
@@ -24,7 +24,10 @@ public class ProductResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createProduct() {
-        return Response.status(201).build();
+    public Response createProduct(Form form, @Context UriInfo uriInfo) {
+        MultivaluedMap<String, String> createProductRequest = form.asMap();
+        Product product = new Product(createProductRequest.getFirst("name"));
+        int productId = productRepository.createProduct(product);
+        return Response.status(201).location(uriInfo.getAbsolutePathBuilder().path(String.valueOf(productId)).build()).build();
     }
 }

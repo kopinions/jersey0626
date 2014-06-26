@@ -3,8 +3,11 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.thoughtworks.com.domain.Product;
 import org.thoughtworks.com.exception.ProductNotFoundException;
 import org.thoughtworks.com.provider.ProductRepository;
 
@@ -14,8 +17,12 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,6 +32,8 @@ public class ProductResourceTest extends JerseyTest {
     @Mock
     ProductRepository productRepository;
 
+    @Captor
+    ArgumentCaptor<Product> productCaptor;
     @Test
     public void should_return_200_when_get_product() {
 
@@ -44,8 +53,12 @@ public class ProductResourceTest extends JerseyTest {
     public void should_create_product() {
         Form createProductRequest = new Form();
         createProductRequest.param("name", "productName");
+        when(productRepository.createProduct(productCaptor.capture())).thenReturn(2);
         Response response = target("/products").request().post(Entity.form(createProductRequest));
         assertEquals(response.getStatus(), 201);
+        verify(productRepository).createProduct(productCaptor.capture());
+        assertThat(productCaptor.getValue().getName(), is("productName"));
+        assertThat(response.getLocation().toString(), endsWith("/products/2"));
     }
 
     @Override
