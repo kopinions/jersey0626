@@ -71,6 +71,13 @@ public class PriceResourceTest extends JerseyTest {
         assertThat(priceArgumentCaptor.getValue().getPrice(), is(1.1));
     }
 
+    @Test
+    public void should_get_all_prices() {
+        Response response = target("/products/2/prices").request().get();
+        assertEquals(response.getStatus(), 200);
+
+    }
+
     @Override
     protected Application configure() {
         ResourceConfig resourceConfig = new ResourceConfig();

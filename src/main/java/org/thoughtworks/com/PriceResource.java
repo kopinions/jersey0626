@@ -21,6 +21,11 @@ public class PriceResource {
     }
 
     @GET
+    public String getAllPrices(Form form, @Context UriInfo uriInfo) {
+        return "11";
+    }
+
+    @GET
     @Path("{id}")
     public PriceJson getPrice(@PathParam("id") int id) {
         productRepository.getPriceById(id);
