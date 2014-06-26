@@ -7,15 +7,21 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.thoughtworks.com.domain.Price;
 import org.thoughtworks.com.domain.Product;
 import org.thoughtworks.com.exception.PriceNotFoundException;
 import org.thoughtworks.com.provider.ProductRepository;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +46,18 @@ public class PriceResourceTest extends JerseyTest {
         when(productRepository.getPriceById(anyInt())).thenThrow(PriceNotFoundException.class);
         Response response = target("/products/2/prices/2").request().accept(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(response.getStatus(), 404);
+    }
+
+    @Test
+    public void should_create_product_price() {
+        Form createPriceRequest = new Form();
+        createPriceRequest.param("price", String.valueOf(1.1));
+        createPriceRequest.param("productId", String.valueOf(1));
+//        when(productRepository.getProductById(2)).thenReturn(new Product(2));
+        when(productRepository.createProductPrice(any(Product.class), any(Price.class))).thenReturn(2);
+        Response response = target("/products/1/prices").request().post(Entity.form(createPriceRequest));
+        assertEquals(response.getStatus(), 201);
+        assertThat(response.getLocation().toString(), endsWith("/products/1/prices/2"));
     }
 
     @Override

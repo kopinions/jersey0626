@@ -33,7 +33,7 @@ public class ProductResource {
 
 
     @Path("{id}/prices")
-    public PriceResource getPrice() {
-        return new PriceResource(productRepository);
+    public PriceResource getPrice(@PathParam("id") int id) {
+        return new PriceResource(productRepository, productRepository.getProductById(id));
     }
 }
