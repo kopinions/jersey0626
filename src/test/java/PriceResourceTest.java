@@ -61,7 +61,7 @@ public class PriceResourceTest extends JerseyTest {
         createPriceRequest.param("price", String.valueOf(1.1));
         createPriceRequest.param("productId", String.valueOf(1));
 
-        when(productRepository.getProductById(2)).thenReturn(new Product(2));
+        when(productRepository.getProductById(2)).thenReturn(new Product(2, "productName"));
         when(productRepository.createProductPrice(any(Product.class), any(Price.class))).thenReturn(2);
 
         Response response = target("/products/2/prices").request().post(Entity.form(createPriceRequest));
@@ -75,7 +75,7 @@ public class PriceResourceTest extends JerseyTest {
 
     @Test
     public void should_get_all_prices() {
-        when(productRepository.getProductById(2)).thenReturn(new Product(2));
+        when(productRepository.getProductById(2)).thenReturn(new Product(2, "productName"));
         when(productRepository.getProductPrices(any(Product.class))).thenReturn(asList(new Price(1, 1.1), new Price(2, 2.2)));
         Response response = target("/products/2/prices").request().get();
         assertEquals(response.getStatus(), 200);

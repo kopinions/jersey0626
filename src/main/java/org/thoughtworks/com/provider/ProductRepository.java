@@ -15,4 +15,6 @@ public interface ProductRepository {
     public int createProductPrice(Product product, Price price);
 
     List<Price> getProductPrices(Product product);
+
+    List<Product> getAllProducts();
 }

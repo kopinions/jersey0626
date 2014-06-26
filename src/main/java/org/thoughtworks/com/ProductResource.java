@@ -7,8 +7,9 @@ import org.thoughtworks.com.provider.ProductRepository;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 
 @Path("/products")
@@ -28,8 +29,9 @@ public class ProductResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProductRefJson> getAllProducts() {
-        return new ArrayList<>();
+    public List<ProductRefJson> getAllProducts(@Context UriInfo uriInfo) {
+        List<Product> allProducts = productRepository.getAllProducts();
+        return allProducts.stream().map(p -> new ProductRefJson(p, uriInfo)).collect(toList());
     }
 
     @POST

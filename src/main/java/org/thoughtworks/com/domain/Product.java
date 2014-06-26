@@ -4,9 +4,10 @@ public class Product {
     private int id;
     private String name;
 
-    public Product(int id) {
+    public Product(int id, String productName) {
 
         this.id = id;
+        name = productName;
     }
 
     public Product(String name) {
