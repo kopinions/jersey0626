@@ -43,6 +43,14 @@ public class ProductResourceTest extends JerseyTest {
 
 
     @Test
+    public void should_get_all_products() {
+        Response response = target("/products").request().accept(MediaType.APPLICATION_JSON_TYPE).get();
+        assertEquals(response.getStatus(), 200);
+
+    }
+
+
+    @Test
     public void should_return_404_when_can_not_find_product() {
         when(productRepository.getProductById(eq(2))).thenThrow(ProductNotFoundException.class);
         Response response = target("/products/2").request().accept(MediaType.APPLICATION_JSON_TYPE).get();

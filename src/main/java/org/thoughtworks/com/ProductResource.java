@@ -1,11 +1,14 @@
 package org.thoughtworks.com;
 
 import org.thoughtworks.com.domain.Product;
+import org.thoughtworks.com.json.ProductRefJson;
 import org.thoughtworks.com.provider.ProductRepository;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Path("/products")
@@ -20,6 +23,13 @@ public class ProductResource {
     public String getProduct(@PathParam("id") int id) {
         productRepository.getProductById(id);
         return "s";
+    }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ProductRefJson> getAllProducts() {
+        return new ArrayList<>();
     }
 
     @POST
