@@ -8,7 +8,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.thoughtworks.com.exception.ProductNotFoundException;
 import org.thoughtworks.com.provider.ProductRepository;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,6 +38,14 @@ public class ProductResourceTest extends JerseyTest {
         when(productRepository.getProductById(eq(2))).thenThrow(ProductNotFoundException.class);
         Response response = target("/products/2").request().accept(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(response.getStatus(), 404);
+    }
+
+    @Test
+    public void should_create_product() {
+        Form createProductRequest = new Form();
+        createProductRequest.param("name", "productName");
+        Response response = target("/products").request().post(Entity.form(createProductRequest));
+        assertEquals(response.getStatus(), 201);
     }
 
     @Override
